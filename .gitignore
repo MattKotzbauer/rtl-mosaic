@@ -5,3 +5,4 @@ __pycache__/
 .venv/
 node_modules/
 slides/intermediate.pdf.tmp*
+docs/STATUS.md
