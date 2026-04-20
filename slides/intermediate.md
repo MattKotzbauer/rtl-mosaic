@@ -156,16 +156,32 @@ Why hide source:
 - `eval/` — baseline runner, metrics, **routing-precision tests** (9 hand-labeled cpu_ip gold entries)
 - `docs/` — architecture diagram, 52-module IP corpus plan, internal status doc
 
-**End-to-end pipeline runs today** on Prob004 + Prob006:
+**End-to-end pipeline ran on full cpu_ip set tonight.** Numbers next slide.
+
+---
+
+## First harness sweep: cpu_ip set, 20-IP corpus
 
 <style scoped>
 table { font-size: 0.85em; }
 </style>
 
-| Demo | Subblocks | IP reused | Gen | Outcome |
-|---|---|---|---|---|
-| Prob004 sync FIFO | 4 | 3 | 1 | compile ✓, sim partial |
-| Prob006 CPU top  | 5 | 2 | 3 | decomp ✓, compile ✗ |
+| Metric | Baseline (single-shot) | Harness (decompose + reuse) |
+|---|---|---|
+| Pass rate | **1/9** | **1/9** |
+| Compiled | 5/9 | 4/9 |
+| Timeouts | 1 | **0** |
+| Total IPs reused across runs | 0 | **11** (mostly register_file, mux2, priority_encoder, …) |
+
+→ Headline pass rate didn't move. But the **failure mode shifted**: baseline timed out / hallucinated semantics; harness now mostly fails at **integrator wiring** (LLM-stitched TopModule emits bad macros).
+
+→ That's a *fixable* failure with the adapter-DSL plan. Next week's first item.
+
+---
+
+## Routing precision (planner → IP picks vs gold)
+
+avg precision **0.31** · avg recall **0.30** · avg kind-agreement **0.78** across all 9 cpu_ip problems. Planner correctly identifies REUSE_IP-vs-GENERATE 78% of the time; picks the *right* IP about a third of the time. Headroom is in the IP search ranking.
 
 ---
 
