@@ -107,6 +107,291 @@
       ],
       "source_file": "modules/up_counter.sv",
       "license": "MIT"
+    },
+    {
+      "id": "mux2",
+      "name": "2-to-1 Multiplexer",
+      "category": "mux",
+      "description": "Combinational 2-to-1 multiplexer with parameterizable bus width.",
+      "keywords": ["mux", "multiplexer", "select", "2 to 1", "combinational"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Data bus width in bits"}
+      ],
+      "ports": [
+        {"name": "in0", "dir": "input",  "width": "WIDTH", "desc": "Input 0"},
+        {"name": "in1", "dir": "input",  "width": "WIDTH", "desc": "Input 1"},
+        {"name": "sel", "dir": "input",  "width": 1,       "desc": "Select line (0=in0, 1=in1)"},
+        {"name": "out", "dir": "output", "width": "WIDTH", "desc": "Selected output"}
+      ],
+      "source_file": "modules/mux2.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "mux8",
+      "name": "8-to-1 Multiplexer",
+      "category": "mux",
+      "description": "Combinational 8-to-1 multiplexer with parameterizable bus width.",
+      "keywords": ["mux", "multiplexer", "select", "8 to 1", "combinational"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Data bus width in bits"}
+      ],
+      "ports": [
+        {"name": "in0", "dir": "input",  "width": "WIDTH", "desc": "Input 0"},
+        {"name": "in1", "dir": "input",  "width": "WIDTH", "desc": "Input 1"},
+        {"name": "in2", "dir": "input",  "width": "WIDTH", "desc": "Input 2"},
+        {"name": "in3", "dir": "input",  "width": "WIDTH", "desc": "Input 3"},
+        {"name": "in4", "dir": "input",  "width": "WIDTH", "desc": "Input 4"},
+        {"name": "in5", "dir": "input",  "width": "WIDTH", "desc": "Input 5"},
+        {"name": "in6", "dir": "input",  "width": "WIDTH", "desc": "Input 6"},
+        {"name": "in7", "dir": "input",  "width": "WIDTH", "desc": "Input 7"},
+        {"name": "sel", "dir": "input",  "width": 3,       "desc": "Select line"},
+        {"name": "out", "dir": "output", "width": "WIDTH", "desc": "Selected output"}
+      ],
+      "source_file": "modules/mux8.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "decoder_3to8",
+      "name": "3-to-8 Decoder",
+      "category": "decoder",
+      "description": "Combinational 3-to-8 one-hot decoder with active-high enable.",
+      "keywords": ["decoder", "3 to 8", "one hot", "enable", "combinational"],
+      "params": [],
+      "ports": [
+        {"name": "en",  "dir": "input",  "width": 1, "desc": "Active-high enable; output is 0 when low"},
+        {"name": "in",  "dir": "input",  "width": 3, "desc": "3-bit binary input"},
+        {"name": "out", "dir": "output", "width": 8, "desc": "One-hot output"}
+      ],
+      "source_file": "modules/decoder_3to8.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "priority_encoder",
+      "name": "Priority Encoder",
+      "category": "encoder",
+      "description": "Combinational priority encoder; outputs index of highest set input bit and a valid flag.",
+      "keywords": ["priority", "encoder", "valid", "highest set bit", "combinational"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Number of input bits"}
+      ],
+      "ports": [
+        {"name": "in",    "dir": "input",  "width": "WIDTH",         "desc": "Input bits"},
+        {"name": "out",   "dir": "output", "width": "$clog2(WIDTH)", "desc": "Index of highest set bit"},
+        {"name": "valid", "dir": "output", "width": 1,               "desc": "1 when at least one input bit is set"}
+      ],
+      "source_file": "modules/priority_encoder.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "comparator",
+      "name": "Magnitude Comparator",
+      "category": "arithmetic",
+      "description": "Combinational signed/unsigned magnitude comparator producing gt/eq/lt flags.",
+      "keywords": ["comparator", "compare", "magnitude", "signed", "unsigned", "gt", "eq", "lt"],
+      "params": [
+        {"name": "WIDTH",  "default": 8, "desc": "Operand width in bits"},
+        {"name": "SIGNED", "default": 0, "desc": "1 = treat operands as two's complement, 0 = unsigned"}
+      ],
+      "ports": [
+        {"name": "a",  "dir": "input",  "width": "WIDTH", "desc": "Operand A"},
+        {"name": "b",  "dir": "input",  "width": "WIDTH", "desc": "Operand B"},
+        {"name": "gt", "dir": "output", "width": 1,       "desc": "1 when a > b"},
+        {"name": "eq", "dir": "output", "width": 1,       "desc": "1 when a == b"},
+        {"name": "lt", "dir": "output", "width": 1,       "desc": "1 when a < b"}
+      ],
+      "source_file": "modules/comparator.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "ripple_adder",
+      "name": "Ripple-Carry Adder",
+      "category": "arithmetic",
+      "description": "N-bit ripple-carry adder built from full-adder chain, with carry in and carry out.",
+      "keywords": ["adder", "ripple carry", "full adder", "arithmetic", "cin", "cout"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Operand width in bits"}
+      ],
+      "ports": [
+        {"name": "a",    "dir": "input",  "width": "WIDTH", "desc": "Operand A"},
+        {"name": "b",    "dir": "input",  "width": "WIDTH", "desc": "Operand B"},
+        {"name": "cin",  "dir": "input",  "width": 1,       "desc": "Carry input"},
+        {"name": "sum",  "dir": "output", "width": "WIDTH", "desc": "Sum output"},
+        {"name": "cout", "dir": "output", "width": 1,       "desc": "Carry output"}
+      ],
+      "source_file": "modules/ripple_adder.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "cla_adder",
+      "name": "4-bit Carry-Lookahead Adder",
+      "category": "arithmetic",
+      "description": "Fixed 4-bit carry-lookahead adder using generate/propagate signals for fast carry chain.",
+      "keywords": ["adder", "carry lookahead", "cla", "4 bit", "generate", "propagate"],
+      "params": [],
+      "ports": [
+        {"name": "a",    "dir": "input",  "width": 4, "desc": "Operand A (4 bits)"},
+        {"name": "b",    "dir": "input",  "width": 4, "desc": "Operand B (4 bits)"},
+        {"name": "cin",  "dir": "input",  "width": 1, "desc": "Carry input"},
+        {"name": "sum",  "dir": "output", "width": 4, "desc": "Sum output"},
+        {"name": "cout", "dir": "output", "width": 1, "desc": "Carry output"}
+      ],
+      "source_file": "modules/cla_adder.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "subtractor",
+      "name": "Subtractor",
+      "category": "arithmetic",
+      "description": "N-bit subtractor (a - b) with borrow-out flag (set when a < b unsigned).",
+      "keywords": ["subtractor", "subtract", "difference", "borrow", "arithmetic"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Operand width in bits"}
+      ],
+      "ports": [
+        {"name": "a",          "dir": "input",  "width": "WIDTH", "desc": "Minuend"},
+        {"name": "b",          "dir": "input",  "width": "WIDTH", "desc": "Subtrahend"},
+        {"name": "diff",       "dir": "output", "width": "WIDTH", "desc": "Difference (a - b)"},
+        {"name": "borrow_out", "dir": "output", "width": 1,       "desc": "1 when a < b unsigned"}
+      ],
+      "source_file": "modules/subtractor.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "barrel_shifter",
+      "name": "Barrel Shifter",
+      "category": "shift",
+      "description": "Combinational barrel shifter supporting logical left, logical right, and arithmetic right shifts via 2-bit op.",
+      "keywords": ["barrel shifter", "shift", "shl", "shr", "sar", "combinational"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Data width in bits"}
+      ],
+      "ports": [
+        {"name": "in",        "dir": "input",  "width": "WIDTH",         "desc": "Data input"},
+        {"name": "shift_amt", "dir": "input",  "width": "$clog2(WIDTH)", "desc": "Shift amount"},
+        {"name": "op",        "dir": "input",  "width": 2,               "desc": "00=SHL, 01=SHR, 10=SAR"},
+        {"name": "out",       "dir": "output", "width": "WIDTH",         "desc": "Shifted output"}
+      ],
+      "source_file": "modules/barrel_shifter.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "shift_register",
+      "name": "Shift Register",
+      "category": "shift",
+      "description": "Synchronous serial-in serial-out shift register with parallel output tap, parameterizable WIDTH and DEPTH.",
+      "keywords": ["shift register", "siso", "serial", "parallel out", "synchronous"],
+      "params": [
+        {"name": "WIDTH", "default": 1, "desc": "Width of each stage in bits"},
+        {"name": "DEPTH", "default": 4, "desc": "Number of stages"}
+      ],
+      "ports": [
+        {"name": "clk",          "dir": "input",  "width": 1,             "desc": "Clock"},
+        {"name": "rst",          "dir": "input",  "width": 1,             "desc": "Synchronous reset, active high"},
+        {"name": "en",           "dir": "input",  "width": 1,             "desc": "Shift enable"},
+        {"name": "sin",          "dir": "input",  "width": "WIDTH",       "desc": "Serial input"},
+        {"name": "sout",         "dir": "output", "width": "WIDTH",       "desc": "Serial output (last stage)"},
+        {"name": "parallel_out", "dir": "output", "width": "WIDTH*DEPTH", "desc": "All stages packed; stage[0] in low bits"}
+      ],
+      "source_file": "modules/shift_register.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "dual_port_ram",
+      "name": "Dual-Port RAM",
+      "category": "memory",
+      "description": "Synchronous dual-port RAM with independent read and write ports (separate clocks supported).",
+      "keywords": ["ram", "dual port", "memory", "synchronous", "read", "write"],
+      "params": [
+        {"name": "WIDTH", "default": 8,  "desc": "Data width in bits"},
+        {"name": "DEPTH", "default": 16, "desc": "Number of entries (power of 2)"}
+      ],
+      "ports": [
+        {"name": "wr_clk", "dir": "input",  "width": 1,               "desc": "Write port clock"},
+        {"name": "we",     "dir": "input",  "width": 1,               "desc": "Write enable"},
+        {"name": "waddr",  "dir": "input",  "width": "$clog2(DEPTH)", "desc": "Write address"},
+        {"name": "wdata",  "dir": "input",  "width": "WIDTH",         "desc": "Write data"},
+        {"name": "rd_clk", "dir": "input",  "width": 1,               "desc": "Read port clock"},
+        {"name": "re",     "dir": "input",  "width": 1,               "desc": "Read enable"},
+        {"name": "raddr",  "dir": "input",  "width": "$clog2(DEPTH)", "desc": "Read address"},
+        {"name": "rdata",  "dir": "output", "width": "WIDTH",         "desc": "Registered read data (1-cycle latency)"}
+      ],
+      "source_file": "modules/dual_port_ram.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "single_port_ram",
+      "name": "Single-Port RAM",
+      "category": "memory",
+      "description": "Synchronous single-port RAM with one shared address; write-then-read on same address returns the new value.",
+      "keywords": ["ram", "single port", "memory", "synchronous", "write first"],
+      "params": [
+        {"name": "WIDTH", "default": 8,  "desc": "Data width in bits"},
+        {"name": "DEPTH", "default": 16, "desc": "Number of entries"}
+      ],
+      "ports": [
+        {"name": "clk",  "dir": "input",  "width": 1,               "desc": "Clock"},
+        {"name": "we",   "dir": "input",  "width": 1,               "desc": "Write enable"},
+        {"name": "addr", "dir": "input",  "width": "$clog2(DEPTH)", "desc": "Address"},
+        {"name": "din",  "dir": "input",  "width": "WIDTH",         "desc": "Write data"},
+        {"name": "dout", "dir": "output", "width": "WIDTH",         "desc": "Read data (combinational)"}
+      ],
+      "source_file": "modules/single_port_ram.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "down_counter",
+      "name": "Down Counter",
+      "category": "control",
+      "description": "Synchronous down counter with sync reset, parallel load, count enable, and zero flag.",
+      "keywords": ["counter", "down counter", "decrement", "control", "load", "enable", "zero flag"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Counter width in bits"}
+      ],
+      "ports": [
+        {"name": "clk",   "dir": "input",  "width": 1,       "desc": "Clock"},
+        {"name": "rst",   "dir": "input",  "width": 1,       "desc": "Synchronous reset, active high"},
+        {"name": "load",  "dir": "input",  "width": 1,       "desc": "Load din into count"},
+        {"name": "en",    "dir": "input",  "width": 1,       "desc": "Count-down enable"},
+        {"name": "din",   "dir": "input",  "width": "WIDTH", "desc": "Load value"},
+        {"name": "count", "dir": "output", "width": "WIDTH", "desc": "Current count"},
+        {"name": "zero",  "dir": "output", "width": 1,       "desc": "1 when count is zero"}
+      ],
+      "source_file": "modules/down_counter.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "edge_detector",
+      "name": "Edge Detector",
+      "category": "control",
+      "description": "Detects rising and falling edges of a 1-bit signal; outputs single-cycle pulses on rise and fall.",
+      "keywords": ["edge detector", "rising edge", "falling edge", "pulse", "synchronous"],
+      "params": [],
+      "ports": [
+        {"name": "clk",   "dir": "input",  "width": 1, "desc": "Clock"},
+        {"name": "rst_n", "dir": "input",  "width": 1, "desc": "Async active-low reset"},
+        {"name": "sig",   "dir": "input",  "width": 1, "desc": "Input signal to monitor"},
+        {"name": "rise",  "dir": "output", "width": 1, "desc": "1-cycle pulse on rising edge"},
+        {"name": "fall",  "dir": "output", "width": 1, "desc": "1-cycle pulse on falling edge"}
+      ],
+      "source_file": "modules/edge_detector.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "sign_extend",
+      "name": "Sign Extender",
+      "category": "arithmetic",
+      "description": "Combinational sign-extension from IN_WIDTH to OUT_WIDTH; truncates if OUT_WIDTH < IN_WIDTH.",
+      "keywords": ["sign extend", "sext", "two's complement", "combinational"],
+      "params": [
+        {"name": "IN_WIDTH",  "default": 16, "desc": "Input width in bits"},
+        {"name": "OUT_WIDTH", "default": 32, "desc": "Output width in bits"}
+      ],
+      "ports": [
+        {"name": "in",  "dir": "input",  "width": "IN_WIDTH",  "desc": "Signed input"},
+        {"name": "out", "dir": "output", "width": "OUT_WIDTH", "desc": "Sign-extended output"}
+      ],
+      "source_file": "modules/sign_extend.sv",
+      "license": "MIT"
     }
   ]
 }
