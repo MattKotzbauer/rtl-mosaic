@@ -41,6 +41,23 @@ A pure codegen model has to re-invent every primitive every time. We want the mo
 
 ---
 
+## How we're different from prior work
+
+<style scoped>
+table { font-size: 0.78em; }
+</style>
+
+| Axis | SiliconMind-V1 | SOTA agentic Verilog | **Us** |
+|---|---|---|---|
+| Layer | trains small open model on 36K verified data | wraps big model in iter-on-testbench | wraps big model in **decompose + reuse** |
+| Output unit | one module | one module | a *system* of modules |
+| Verifier in loop | training-time | inference-time | inference-time |
+| Novel piece | training-data pipeline | tight test-feedback | **IP corpus + MCP boundary** |
+
+→ We are NOT training a model. We're NOT beating SOTA on VerilogEval. We claim the **system-level reuse pattern** is worth its complexity vs naked codegen — narrower, but defensible.
+
+---
+
 ## Benchmark: ChipBench (UCSD/Columbia, 2025)
 
 Three difficulty tiers — we use the two harder ones:
@@ -172,22 +189,25 @@ table { font-size: 0.85em; }
 
 ---
 
-## Eval methodology
+## What we're testing — and against what
 
-Every harness run emits a JSON trace; `eval/metrics.py` aggregates into:
+**Primary**: pass rate, harness vs naked Claude, on 15 problems. Same metric as SiliconMind. Baseline today: **27%**. Target for final: **≥ 60%**.
 
-- **pass rate** — same metric as SiliconMind
+**Secondary** (per `eval/metrics.py`):
+
 - **# LLM calls / problem** — cost proxy
 - **reuse ratio** — `loc_reused / (loc_reused + loc_generated)`
+- **routing precision/recall** — vs hand-labeled gold per cpu_ip problem
+
+<style scoped>
+pre { font-size: 0.75em; }
+</style>
 
 ```json
 { "problem": "Prob004_synchronous_FIFO",
-  "subblocks": [{"kind": "ip", "id": "sync_fifo"}, ...],
   "summary": {"n_ip_reuses": 3, "n_generated": 1},
   "simulation": {"compiled": true, "passed": true} }
 ```
-
-Headline plot for the final: **pass rate vs reuse ratio**, baseline vs harness.
 
 ---
 
