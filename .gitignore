@@ -4,3 +4,4 @@ __pycache__/
 *.sim
 .venv/
 node_modules/
+slides/intermediate.pdf.tmp*
