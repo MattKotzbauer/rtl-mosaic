@@ -151,12 +151,12 @@ Why hide source:
 
 `github.com/MattKotzbauer/rtl-mosaic`
 
-- `mcp/` — server + 5 mock IPs. All compile, 8/8 tests green.
+- `mcp/` — server + **20 IPs**, each with its own Icarus self-test. **20/20 pass**.
 - `harness/` — planner, codegen, ip_router, integrator, CLI
-- `eval/` — baseline runner, metrics module
-- `docs/` — architecture diagram, 52-module IP corpus plan
+- `eval/` — baseline runner, metrics, **routing-precision tests** (9 hand-labeled cpu_ip gold entries)
+- `docs/` — architecture diagram, 52-module IP corpus plan, internal status doc
 
-**End-to-end pipeline runs today** (neither passes — that's next week):
+**End-to-end pipeline runs today** on Prob004 + Prob006:
 
 <style scoped>
 table { font-size: 0.85em; }
@@ -185,7 +185,7 @@ table { font-size: 0.85em; }
 
 **52 modules** curated across memory · arithmetic · comm · control · misc.
 
-→ Status today: **5 mocked / 50 planned / 0 ingested.**
+→ Status today: **20 ingested + tested** (all pass Icarus) / 30 planned for final.
 
 ---
 
@@ -229,7 +229,7 @@ table { font-size: 0.85em; }
 
 | Day | Task | Owner |
 |---|---|---|
-| Mon–Tue | Ingest ~50 IPs into MCP corpus | Matt |
+| Mon–Tue | Grow corpus 20 → 50 IPs (mostly OpenTitan + PULP) | Matt |
 | Mon–Tue | Improve planner (multi-shot, retry on parse fail) | Warren |
 | Wed | TopModule wiring: replace LLM stitch with adapter DSL | Warren |
 | Wed–Thu | Test-feedback loop (re-run on testbench failure) | Leo |
