@@ -1,0 +1,112 @@
+{
+  "ips": [
+    {
+      "id": "sync_fifo",
+      "name": "Synchronous FIFO",
+      "category": "memory",
+      "description": "Single-clock FIFO with parameterizable data width and depth, full/empty flags.",
+      "keywords": ["fifo", "queue", "buffer", "synchronous", "single clock", "memory"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Data bus width in bits"},
+        {"name": "DEPTH", "default": 16, "desc": "Number of entries (power of 2)"}
+      ],
+      "ports": [
+        {"name": "clk",   "dir": "input",  "width": 1,       "desc": "Clock"},
+        {"name": "rst",   "dir": "input",  "width": 1,       "desc": "Synchronous reset, active high"},
+        {"name": "wr_en", "dir": "input",  "width": 1,       "desc": "Write enable"},
+        {"name": "rd_en", "dir": "input",  "width": 1,       "desc": "Read enable"},
+        {"name": "din",   "dir": "input",  "width": "WIDTH", "desc": "Write data"},
+        {"name": "dout",  "dir": "output", "width": "WIDTH", "desc": "Read data"},
+        {"name": "full",  "dir": "output", "width": 1,       "desc": "FIFO full flag"},
+        {"name": "empty", "dir": "output", "width": 1,       "desc": "FIFO empty flag"}
+      ],
+      "source_file": "modules/sync_fifo.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "async_fifo",
+      "name": "Asynchronous FIFO (CDC)",
+      "category": "memory",
+      "description": "Dual-clock FIFO using gray-coded pointers for safe clock-domain crossing.",
+      "keywords": ["fifo", "asynchronous", "async", "cdc", "clock domain", "crossing", "gray code", "dual clock", "buffer"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Data bus width in bits"},
+        {"name": "DEPTH", "default": 16, "desc": "Number of entries (must be power of 2)"}
+      ],
+      "ports": [
+        {"name": "wr_clk", "dir": "input",  "width": 1,       "desc": "Write-side clock"},
+        {"name": "wr_rst", "dir": "input",  "width": 1,       "desc": "Write-side reset (active high)"},
+        {"name": "wr_en",  "dir": "input",  "width": 1,       "desc": "Write enable"},
+        {"name": "din",    "dir": "input",  "width": "WIDTH", "desc": "Write data"},
+        {"name": "full",   "dir": "output", "width": 1,       "desc": "FIFO full (write side)"},
+        {"name": "rd_clk", "dir": "input",  "width": 1,       "desc": "Read-side clock"},
+        {"name": "rd_rst", "dir": "input",  "width": 1,       "desc": "Read-side reset (active high)"},
+        {"name": "rd_en",  "dir": "input",  "width": 1,       "desc": "Read enable"},
+        {"name": "dout",   "dir": "output", "width": "WIDTH", "desc": "Read data"},
+        {"name": "empty",  "dir": "output", "width": 1,       "desc": "FIFO empty (read side)"}
+      ],
+      "source_file": "modules/async_fifo.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "mux4",
+      "name": "4-to-1 Multiplexer",
+      "category": "mux",
+      "description": "Combinational 4-to-1 multiplexer with parameterizable bus width.",
+      "keywords": ["mux", "multiplexer", "select", "4 to 1", "combinational"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Data bus width in bits"}
+      ],
+      "ports": [
+        {"name": "in0", "dir": "input",  "width": "WIDTH", "desc": "Input 0"},
+        {"name": "in1", "dir": "input",  "width": "WIDTH", "desc": "Input 1"},
+        {"name": "in2", "dir": "input",  "width": "WIDTH", "desc": "Input 2"},
+        {"name": "in3", "dir": "input",  "width": "WIDTH", "desc": "Input 3"},
+        {"name": "sel", "dir": "input",  "width": 2,       "desc": "Select line"},
+        {"name": "out", "dir": "output", "width": "WIDTH", "desc": "Selected output"}
+      ],
+      "source_file": "modules/mux4.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "register_file",
+      "name": "Register File",
+      "category": "memory",
+      "description": "16-entry register file with two read ports and one write port, parameterizable WIDTH.",
+      "keywords": ["register file", "regfile", "memory", "dual read", "single write", "16 entry"],
+      "params": [
+        {"name": "WIDTH", "default": 32, "desc": "Register width in bits"}
+      ],
+      "ports": [
+        {"name": "clk",     "dir": "input",  "width": 1,       "desc": "Clock"},
+        {"name": "we",      "dir": "input",  "width": 1,       "desc": "Write enable"},
+        {"name": "waddr",   "dir": "input",  "width": 4,       "desc": "Write address (0-15)"},
+        {"name": "wdata",   "dir": "input",  "width": "WIDTH", "desc": "Write data"},
+        {"name": "raddr_a", "dir": "input",  "width": 4,       "desc": "Read port A address"},
+        {"name": "rdata_a", "dir": "output", "width": "WIDTH", "desc": "Read port A data"},
+        {"name": "raddr_b", "dir": "input",  "width": 4,       "desc": "Read port B address"},
+        {"name": "rdata_b", "dir": "output", "width": "WIDTH", "desc": "Read port B data"}
+      ],
+      "source_file": "modules/register_file.sv",
+      "license": "MIT"
+    },
+    {
+      "id": "up_counter",
+      "name": "Up Counter",
+      "category": "control",
+      "description": "Synchronous up counter with enable and synchronous active-high reset.",
+      "keywords": ["counter", "up counter", "increment", "control", "synchronous", "enable", "reset"],
+      "params": [
+        {"name": "WIDTH", "default": 8, "desc": "Counter width in bits"}
+      ],
+      "ports": [
+        {"name": "clk", "dir": "input",  "width": 1,       "desc": "Clock"},
+        {"name": "rst", "dir": "input",  "width": 1,       "desc": "Synchronous reset, active high"},
+        {"name": "en",  "dir": "input",  "width": 1,       "desc": "Count enable"},
+        {"name": "q",   "dir": "output", "width": "WIDTH", "desc": "Current count value"}
+      ],
+      "source_file": "modules/up_counter.sv",
+      "license": "MIT"
+    }
+  ]
+}
