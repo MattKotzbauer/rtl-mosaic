@@ -30,21 +30,7 @@
 \end{frame}
 
 % ------------------------------------------------------------
-\begin{frame}{Where we landed}
-  \begin{itemize}
-    \item Project framing (unchanged): \blue{IP reuse, not scratch generation}, is the part of chip design current LLMs are weakest at.
-    \item Intermediate deliverable was a single harness on top of one LLM.
-    \item HT's note: \emph{turn this into a benchmark; compare LLMs.}
-    \item This deck: \red{10 frontier LLMs across 3 providers}, scored on IP routing against hand-labeled gold.
-  \end{itemize}
-
-  \vspace{0.5em}
-  \footnotesize
-  Scratch baseline kept as a foil. The interesting axis is whether bigger models actually pick the right IP, not whether they write better Verilog from scratch.
-\end{frame}
-
-% ------------------------------------------------------------
-\begin{frame}{The eval (one slide, no architecture)}
+\begin{frame}{The eval}
   Pipeline per (LLM, problem):
   \vspace{0.3em}
   \begin{enumerate}
@@ -70,27 +56,23 @@
 % ------------------------------------------------------------
 \begin{frame}{Models tested}
   \begin{center}
+  \footnotesize
   \begin{tabular}{lll}
     \toprule
-    Provider & Model & Released \\
+    Provider & Model & API \\
     \midrule
-    Anthropic   & Claude Opus 4.7    & 2026-02 \\
-    Anthropic   & Claude Sonnet 4.6  & 2025-12 \\
-    Anthropic   & Claude Haiku 4.5   & 2025-10 \\
-    OpenAI      & GPT-5.4            & 2026-03 \\
-    OpenAI      & GPT-5.2            & 2025-12 \\
-    OpenAI      & GPT-5.1            & 2025-11 \\
-    OpenAI      & GPT-5              & 2025-08 \\
-    OpenAI      & GPT-4.1            & 2025-04 \\
-    AWS Bedrock & DeepSeek-R1        & 2025-01 \\
-    AWS Bedrock & DeepSeek V3.2      & 2025-09 \\
+    Anthropic   & Claude Opus 4.7, Sonnet 4.6, Haiku 4.5            & \texttt{claude} CLI \\
+    OpenAI      & GPT-5.4, GPT-5.2, GPT-5.1, GPT-5, GPT-4.1         & SDK \\
+    AWS Bedrock & DeepSeek-R1, DeepSeek V3.2                        & \texttt{bedrock-runtime} \\
+    Google      & Gemini 2.5 Pro, 2.5 Flash-Lite,                   & REST \\
+                & Gemini 3 Flash, Gemini 3.1 Flash-Lite             & \\
     \bottomrule
   \end{tabular}
   \end{center}
 
   \vspace{0.6em}
   \footnotesize
-  Same planner prompt across all 10 models. No few-shot examples. Same router (deterministic, MCP-backed). Same 20-IP corpus. Same 9 cpu\_ip problems.
+  \red{14 models, 4 providers}. Same planner prompt across all of them. No few-shot examples. Same router (deterministic, MCP-backed). Same 20-IP corpus. Same 9 cpu\_ip problems. Gemini 2.5 Flash and Gemini 3 Pro/3.1 Pro returned mostly 503s and are excluded.
 \end{frame}
 
 % ------------------------------------------------------------

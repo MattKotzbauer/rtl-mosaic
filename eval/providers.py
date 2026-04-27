@@ -107,8 +107,11 @@ PROVIDERS = {
     "openai:gpt-4.1":    (call_openai, "gpt-4.1"),
     "bedrock:deepseek-r1": (call_bedrock, "us.deepseek.r1-v1:0"),
     "bedrock:deepseek-v3.2": (call_bedrock, "deepseek.v3.2"),
-    "gemini:2.5-pro":       (call_gemini, "gemini-2.5-pro"),
-    "gemini:2.5-flash":     (call_gemini, "gemini-2.5-flash"),
+    "gemini:2.5-pro":             (call_gemini, "gemini-2.5-pro"),
+    "gemini:2.5-flash":           (call_gemini, "gemini-2.5-flash"),
+    "gemini:2.5-flash-lite":      (call_gemini, "gemini-2.5-flash-lite"),
+    "gemini:3-flash-preview":     (call_gemini, "gemini-3-flash-preview"),
+    "gemini:3.1-flash-lite-preview": (call_gemini, "gemini-3.1-flash-lite-preview"),
 }
 
 

@@ -24,7 +24,7 @@ Concrete additions:
 - **Figure pipeline** (`eval/make_figures.py`): 10 figures, all rebuilt from
   the JSON results.
 
-## Models in the eval
+## Models in the eval (14 total)
 
 | Provider | Model | API path |
 |---|---|---|
@@ -39,10 +39,14 @@ Concrete additions:
 | AWS Bedrock | DeepSeek-R1 | `bedrock-runtime` (us-east-1) |
 | AWS Bedrock | DeepSeek V3.2 | `bedrock-runtime` (us-east-1) |
 | Google | Gemini 2.5 Pro | REST |
-| Google | Gemini 2.5 Flash | REST |
+| Google | Gemini 2.5 Flash-Lite | REST |
+| Google | Gemini 3 Flash Preview | REST |
+| Google | Gemini 3.1 Flash-Lite Preview | REST |
 
-12 models total. Same planner prompt, same router (deterministic, MCP-backed),
-same 20-IP corpus, same 9 cpu_ip problems. No few-shot examples.
+Same planner prompt, same router (deterministic, MCP-backed), same 20-IP
+corpus, same 9 cpu_ip problems. No few-shot examples. Gemini 2.5 Flash,
+Gemini 3 Pro Preview, and Gemini 3.1 Pro Preview returned mostly 503s and
+are excluded.
 
 ## Headline results
 
