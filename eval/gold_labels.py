@@ -139,6 +139,66 @@ GOLD: dict[str, GoldEntry] = {
         },
         "rationale": "CP0 has a free-running count_o (up_counter), a count==compare check (comparator), and a small bank of named 32-bit registers (register_file-shaped); exception/ERET/IP-field updates are bespoke.",
     },
+
+    # -----------------------------------------------------------------------
+    # ChipBench self_contain set (single-IP-shaped problems, added 2026-04-27)
+    # -----------------------------------------------------------------------
+    "Prob000_Four-to-one_multiplexer": {
+        "expected_subblocks": ["mux4"],
+        "expected_kinds": {"mux": "REUSE_IP"},
+        "rationale": "Plain 4:1 mux on 2-bit data -- mux4 is a one-line drop-in.",
+    },
+
+    "Prob030_simple_implementation_RAM": {
+        "expected_subblocks": ["dual_port_ram"],
+        "expected_kinds": {
+            "ram":         "REUSE_IP",
+            "reset_logic": "GENERATE",
+        },
+        "rationale": "Two-port RAM (read + write port, simultaneous) -- dual_port_ram is the architectural fit; the active-low async reset wrapper is bespoke.",
+    },
+
+    "Prob028_up_and_down_counter": {
+        "expected_subblocks": ["up_down_counter"],
+        "expected_kinds": {
+            "counter":   "REUSE_IP",
+            "zero_flag": "GENERATE",
+        },
+        "rationale": "Decimal up/down counter with a mode pin -- up_down_counter is a direct match; the zero-flag pulse is a one-line equality check.",
+    },
+
+    "Prob031_johnson_counter": {
+        "expected_subblocks": ["johnson_counter"],
+        "expected_kinds": {"counter": "REUSE_IP"},
+        "rationale": "Twisted-ring counter with a fixed 8-state cycle -- johnson_counter is exactly this primitive.",
+    },
+
+    "Prob023_gray_code_counter": {
+        "expected_subblocks": ["gray_counter"],
+        "expected_kinds": {
+            "counter":  "REUSE_IP",
+            "every_two_cycles_gate": "GENERATE",
+        },
+        "rationale": "4-bit Gray-code counter -- gray_counter handles the gray sequencing; the every-two-cycles enable is a 1-bit toggle.",
+    },
+
+    "Prob017_arbitrary_fractional_frequency_division": {
+        "expected_subblocks": ["freq_divider"],
+        "expected_kinds": {
+            "divider":  "REUSE_IP",
+            "fractional_logic": "GENERATE",
+        },
+        "rationale": "Fractional N.M divider built on top of integer divide-by-N -- freq_divider supplies the integer base; the LCM/accumulator wrapper for the fractional part is bespoke.",
+    },
+
+    "Prob032_pipeline_multiplier": {
+        "expected_subblocks": ["multiplier"],
+        "expected_kinds": {
+            "multiplier": "REUSE_IP",
+            "pipeline_regs": "GENERATE",
+        },
+        "rationale": "4x4 pipelined multiplier -- the combinational core is a multiplier IP; the pipeline registers between stages are trivial bespoke logic.",
+    },
 }
 
 

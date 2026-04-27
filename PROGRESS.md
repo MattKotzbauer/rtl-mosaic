@@ -4,6 +4,59 @@
 **Course**: CS 1440R / 2440R, HT Kung
 **Slot**: Mon 4/27, 3:42pm
 
+## Post-presentation expansion (2026-04-27, after final)
+
+Benchmark grew after the final-presentation slot:
+
+- **Corpus 20 → 30 IPs**: added `alu`, `multiplier`, `divider`, `bcd_counter`,
+  `gray_counter`, `johnson_counter`, `up_down_counter`, `freq_divider`, `lfsr`,
+  `t_flipflop`. Each ships with an Icarus self-test; all 30 pass.
+- **Eval set 9 → 16 problems**: added 7 ChipBench self_contain problems
+  (Prob000 mux, Prob030 RAM, Prob028 up/down counter, Prob031 Johnson counter,
+  Prob023 Gray counter, Prob017 fractional freq divider, Prob032 pipeline
+  multiplier). Each picked because there's a single architectural-fit IP in
+  the new corpus, so routing scores have a meaningful ceiling.
+- **Gold labels updated** in `eval/gold_labels.py`. The 9 cpu_ip entries are
+  unchanged (so old runs remain comparable); the 7 new self_contain entries
+  reference the new IPs.
+- **`eval/test_routing.py` `_prompt_path`** now also looks in
+  `dataset_self_contain` so problems from either set work without code
+  changes.
+- Re-ran routing eval on all 15 models × 16 problems; figures and
+  `summary.json` regenerated.
+
+### Routing F1 leaderboard on 16 problems (vs. 9 before)
+
+| Rank | Model | F1 (16-prob) | F1 (9-prob, prior) | Δ |
+|---|---|---|---|---|
+| 1 | Gemini 2.5 Flash | 0.523 | (excl.) | — |
+| 2 | GPT-5.2 | 0.467 | 0.522 | -0.055 |
+| 3 | DeepSeek V3.2 | 0.441 | 0.700 | **-0.259** |
+| 4 | Gemini 2.5 Flash-Lite | 0.437 | 0.555 | -0.118 |
+| 5 | GPT-5.4 | 0.404 | 0.615 | -0.211 |
+| 6 | Gemini 3.1 Flash-Lite Preview | 0.394 | 0.537 | -0.143 |
+| 7 | Claude Opus 4.7 | 0.375 | 0.478 | -0.103 |
+| 8 | Claude Haiku 4.5 | 0.349 | 0.496 | -0.147 |
+| 8 | DeepSeek-R1 | 0.349 | 0.621 | **-0.272** |
+| 10 | GPT-5.1 | 0.325 | 0.500 | -0.175 |
+| 11 | GPT-4.1 | 0.300 | 0.533 | -0.233 |
+| 12 | Claude Sonnet 4.6 | 0.262 | 0.456 | -0.194 |
+| 13 | GPT-5 | 0.188 | 0.333 | -0.145 |
+| 14 | Gemini 2.5 Pro | 0.188 | 0.389 | -0.201 |
+| 15 | Gemini 3 Flash Preview | 0.136 | 0.300 | -0.164 |
+
+Most models dropped 0.10–0.27 F1 going from 9 to 16 problems. The new
+self_contain problems were *not* easier — they exposed routing weaknesses
+that the cpu_ip set didn't.
+
+Failure pattern: on a problem like `Prob028_up_and_down_counter`, the
+planner often labels the subblock as `REUSE_IP` with `search_query="counter"`
+which the keyword router resolves to `up_counter` instead of the (correct)
+`up_down_counter`. The router does keyword-overlap; the corpus has many
+counter variants now and the planner's queries are not specific enough to
+disambiguate. **This is the bottleneck the corpus expansion surfaces** — and
+it's exactly the kind of finding the original 9-problem set hid.
+
 ## What changed since the intermediate
 
 The intermediate deck (`slides/intermediate.{md,pdf}`) framed the project as a

@@ -49,6 +49,11 @@ CHIPBENCH_CPU_IP = os.path.join(
     os.path.dirname(_REPO_ROOT),
     "ChipBench", "Verilog Gen", "dataset_cpu_ip",
 )
+CHIPBENCH_SELF_CONTAIN = os.path.join(
+    os.path.dirname(_REPO_ROOT),
+    "ChipBench", "Verilog Gen", "dataset_self_contain",
+)
+CHIPBENCH_DIRS = [CHIPBENCH_CPU_IP, CHIPBENCH_SELF_CONTAIN]
 RESULTS_DIR = os.path.join(_REPO_ROOT, "results", "routing")
 RESULTS_JSON = os.path.join(RESULTS_DIR, "eval.json")
 
@@ -58,6 +63,10 @@ RESULTS_JSON = os.path.join(RESULTS_DIR, "eval.json")
 # ---------------------------------------------------------------------------
 
 def _prompt_path(problem_id: str) -> str:
+    for d in CHIPBENCH_DIRS:
+        p = os.path.join(d, f"{problem_id}_prompt.txt")
+        if os.path.exists(p):
+            return p
     return os.path.join(CHIPBENCH_CPU_IP, f"{problem_id}_prompt.txt")
 
 
