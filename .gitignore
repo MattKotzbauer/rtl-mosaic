@@ -16,3 +16,12 @@ slides/*.nav
 slides/*.out
 slides/*.snm
 slides/*.toc
+report/*.aux
+report/*.log
+report/*.out
+report/*.bbl
+report/*.blg
+report/*.synctex.gz
+Team_*.zip
+.pytest_cache/
+.deepeval/
