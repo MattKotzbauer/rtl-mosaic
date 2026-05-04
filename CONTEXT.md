@@ -10,11 +10,11 @@ Last sync: 2026-05-04 (six days to final report deadline)
 We built a **system-level RTL design harness** on top of the SiliconMind-V1 idea, plus a **benchmark** for evaluating large language models (LLMs) on the IP-reuse-versus-scratch axis of chip design. The harness takes a Verilog spec, asks an LLM-as-planner to decompose it into subblocks, routes any subblock tagged `REUSE_IP` to a curated 30-IP corpus over an MCP server, and integrates the result into a `TopModule` verified by Icarus Verilog testbenches.
 
 The **central claim** we land on, supported by 16-problem multi-LLM data:
-**IP-reuse skill is its own axis.** It does not track scratch Verilog pass rate. A reuse-aware metric reveals model capabilities that scratch-only benchmarks (VerilogEval, original ChipBench) hide.
+**IP-reuse skill behaves as an axis independent of scratch Verilog generation**, so a reuse-aware metric exposes model capability differences that scratch-only benchmarks (VerilogEval, original ChipBench) obscure.
 
 ## Where we are
 
-**Final presentation**: submitted Mon 2026-04-27 at 3:42pm. Slot was 12 min; we used the 8-frame Beamer deck in `slides/final.{tex,pdf}` and the verbatim spoken script in `slides/script_plain.md`.
+**Final presentation**: submitted Mon 2026-04-27 at 3:42pm. Slot was 12 min, and we used the 8-frame Beamer deck in `slides/final.{tex,pdf}` and the verbatim spoken script in `slides/script_plain.md`.
 
 **Final report**: due Sun 2026-05-10 23:59 EDT. IEEE 8.5×11 two-column, 3 pages excluding refs and supplement. PDF + zip submission. Graded on (1) novelty, (2) results and significance, (3) writing quality.
 
@@ -25,17 +25,17 @@ The **central claim** we land on, supported by 16-problem multi-LLM data:
   - GPT-5.2 — F1=0.467
   - DeepSeek V3.2 — F1=0.441
   - Gemini 2.5 Flash-Lite — F1=0.437
-- Scratch baseline (foil): mostly flat at ~1/9 = 11% on cpu_ip; Anthropic best on not_self_contain at 50%
+- Scratch baseline (foil): mostly flat at ~1/9 = 11% on cpu_ip, with Anthropic best on not_self_contain at 50%
 
 **State of the corpus** (see `mcp/corpus/catalog.json`):
 - 30 IPs, all passing Icarus self-tests
 - Categories: memory, datapath, counter, sequence, primitive, clock
-- Hand-written; license MIT throughout
+- Hand-written, with license MIT throughout
 
 **State of the gold labels** (see `eval/gold_labels.py`):
 - 16 hand-labeled entries (Matt) — 9 cpu_ip + 7 self_contain
 - Each entry: expected_subblocks (gold IP IDs) + expected_kinds (REUSE_IP/GENERATE per role) + rationale
-- One annotator. Inter-annotator agreement TODO if time permits.
+- One annotator so far, with inter-annotator agreement listed as TODO if time permits.
 
 ## Files that matter
 
@@ -77,7 +77,7 @@ The **central claim** we land on, supported by 16-problem multi-LLM data:
 4. Build supplement zip per Canvas naming convention
 
 **Should-have for "results and significance" rubric category**:
-5. End-to-end harness sweep on 16 problems (we only have routing scores; need TopModule pass/fail)
+5. End-to-end harness sweep on 16 problems (we only have routing scores, and we need TopModule pass/fail)
 6. Reuse-ratio metric on integrated TopModule (LoC reused / total)
 7. Quantify the four failure modes from slide 7
 8. Multi-seed runs (n=3) for the four headline models — closes variance objection
@@ -96,10 +96,10 @@ The full TODO list (30 tasks) is tracked in the agent task system.
 
 ## Honest weak spots (do not over-claim in the report)
 
-1. **Harness end-to-end does not currently beat scratch baseline on cpu_ip.** Both are 1/9. The intermediate-deck claim that decomposition + IP-reuse beats scratch on cpu_ip is not currently supported. Either commit fully to routing-quality as the headline (recommended) or run a test-feedback loop and re-measure end-to-end before claiming a win.
+1. **Harness end-to-end does not currently beat scratch baseline on cpu_ip — both sit at 1/9 today.** The intermediate-deck claim that decomposition + IP-reuse beats scratch on cpu_ip is not currently supported. Either commit fully to routing-quality as the headline (recommended) or run a test-feedback loop and re-measure end-to-end before claiming a win.
 2. **Run-to-run variance is real.** Claude Opus 4.7 went from F1=0.678 (one early run, 9 problems) to F1=0.375 (current 16-problem run). Single-seed numbers are noisy — multi-seed runs would close this.
 3. **Single annotator on gold labels.** Cohen's kappa with a second annotator is the obvious follow-up.
-4. **Keyword router has known disambiguation failures.** With 30 IPs in the corpus, generic search queries collide (e.g., `"counter"` resolves to `up_counter` even when `up_down_counter` is the right pick). This is a router design limitation, not an LLM limitation.
+4. **Keyword router has known disambiguation failures.** With 30 IPs in the corpus, generic search queries collide (e.g., `"counter"` resolves to `up_counter` even when `up_down_counter` is the right pick). The bottleneck here lives in the router design rather than in any LLM capability.
 
 ## How to reproduce the headline numbers
 

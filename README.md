@@ -4,7 +4,7 @@ System-level RTL design harness on top of [SiliconMind-V1](https://arxiv.org/abs
 
 **CS 1440R Team 11** (Spring 2026, Harvard, HT Kung) — Leonardo Ferreira, Matt Kotzbauer, Warren Zhu.
 
-> **For full project context, current status, and open TODOs, read [CONTEXT.md](./CONTEXT.md).** It's the source of truth.
+> **For full project context, current status, and open TODOs, read [CONTEXT.md](./CONTEXT.md), which is the canonical reference for the project state.**
 
 ## What it does
 
@@ -17,7 +17,7 @@ spec  →  Planner (LLM)  →  per-subblock router  →  Integrator  →  iveril
 
 Take a chip-design spec. An LLM-as-planner decomposes it into subblocks, tagging each as `REUSE_IP` (an off-the-shelf piece of IP from a curated corpus) or `GENERATE` (custom glue logic). The router resolves `REUSE_IP` subblocks to a 30-IP corpus over MCP. An integrator stitches everything into one `TopModule` and verifies against an Icarus Verilog testbench.
 
-The headline finding from the multi-LLM benchmark: **IP-reuse skill is its own axis**. Across 15 frontier LLMs from 4 providers, routing F1 ranges from 0.13 to 0.52 while scratch Verilog pass rate is roughly flat. Some of the strongest scratch coders are the weakest IP routers. A reuse-aware metric reveals a model capability that scratch-only benchmarks hide.
+The headline finding from the multi-LLM benchmark is that **IP-reuse skill behaves as an axis independent of scratch Verilog generation**. Across 15 frontier LLMs from 4 providers, routing F1 spans 0.13 to 0.52 while scratch Verilog pass rate on the same problems remains roughly flat, so a reuse-aware metric exposes capability differences that scratch-only benchmarks obscure.
 
 ## Layout
 
@@ -28,7 +28,7 @@ The headline finding from the multi-LLM benchmark: **IP-reuse skill is its own a
 | `mcp/`      | IP-search MCP server + 30-IP corpus + per-IP self-tests |
 | `slides/`   | Final-presentation Beamer source + PDF + figures + spoken script |
 | `report/`   | IEEE 2-col final report (in progress, due 2026-05-10) |
-| `results/`  | Generated outputs (`multi_routing/`, `multi/`, `harness/`); large files gitignored |
+| `results/`  | Generated outputs (`multi_routing/`, `multi/`, `harness/`), with large files gitignored |
 | `docs/`     | Architecture diagram, IP corpus plan |
 
 ## Run
