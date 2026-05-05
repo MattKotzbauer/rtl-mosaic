@@ -3,12 +3,12 @@
 **Team 11**: Leonardo Ferreira, Matthew Kotzbauer, Warren Zhu
 **Course**: CS 1440R / 2440R, HT Kung
 **Final presentation**: delivered Mon 2026-04-27, 3:42pm
-**Final report deadline**: Sun 2026-05-10, 23:59 EDT
+**Final report deadline**: **Fri 2026-05-08, 23:59 EDT** (moved up from 5/10 by FAS Registrar mandate, see Canvas announcement 5/1)
 **Last updated**: 2026-05-05
 
 ## Submission readiness (2026-05-05)
 
-The repo is in a submittable state today, five days before the report deadline. Headline numbers, leading figure, 3-page IEEE PDF, code supplement script, and reproducibility docs are all in place and verified.
+The repo is in a submittable state today, three days before the revised report deadline. Headline numbers, leading figure, 3-page IEEE PDF, code supplement script, and reproducibility docs are all in place and verified.
 
 | Submission artifact | State | Path |
 |---|---|---|

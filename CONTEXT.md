@@ -1,7 +1,7 @@
 # Project Context — rtl-mosaic
 *Canonical state doc for Team 11 (CS 1440R, Spring 2026). Read this first before any work on the project.*
 
-Last sync: 2026-05-04 (six days to final report deadline)
+Last sync: 2026-05-05 (three days to revised final report deadline)
 
 ---
 
@@ -16,11 +16,11 @@ The **central claim** we land on, supported by 16-problem multi-LLM data:
 
 **Final presentation**: submitted Mon 2026-04-27 at 3:42pm. Slot was 12 min, and we used the 8-frame Beamer deck in `slides/final.{tex,pdf}` and the verbatim spoken script in `slides/script_plain.md`.
 
-**Final report**: due Sun 2026-05-10 23:59 EDT. IEEE 8.5×11 two-column, 3 pages excluding refs and supplement. PDF + zip submission. Graded on (1) novelty, (2) results and significance, (3) writing quality.
+**Final report**: due **Fri 2026-05-08 23:59 EDT** (moved up from 5/10 by FAS Registrar's Office mandate, see Canvas announcement on 5/1). IEEE 8.5×11 two-column, 3 pages excluding refs and supplement. PDF + zip submission. Graded on (1) novelty, (2) results and significance, (3) writing quality.
 
 **State of the eval** (see `results/multi_routing/summary.json`):
-- 15 LLMs across 4 providers ran the routing pipeline on 16 ChipBench problems
-- Headline 4 models for the report (best-of-provider, full n=16):
+- 15 LLMs across 4 providers ran the routing pipeline on 26 ChipBench problems (expanded from 16 on 2026-05-05)
+- Headline 4 models for the report (best-of-provider, on 16-problem snapshot used in current report — re-eval on 26 in progress):
   - Claude Opus 4.7 — F1=0.375
   - GPT-5.2 — F1=0.467
   - DeepSeek V3.2 — F1=0.441
@@ -33,9 +33,10 @@ The **central claim** we land on, supported by 16-problem multi-LLM data:
 - Hand-written, with license MIT throughout
 
 **State of the gold labels** (see `eval/gold_labels.py`):
-- 16 hand-labeled entries (Matt) — 9 cpu_ip + 7 self_contain
+- 26 hand-labeled entries (Matt) — 9 cpu_ip + 17 self_contain (expanded 2026-05-05)
 - Each entry: expected_subblocks (gold IP IDs) + expected_kinds (REUSE_IP/GENERATE per role) + rationale
 - One annotator so far, with inter-annotator agreement listed as TODO if time permits.
+- Anti-LLM-slop documentation: `docs/INTEGRITY.md`
 
 ## Files that matter
 

@@ -19,8 +19,11 @@ rsync -a \
 cp README.md CONTEXT.md PROGRESS.md "$PKG/"
 
 # results JSON (keep summary + per-provider, drop large per-problem .sv outputs)
-mkdir -p "$PKG/results/multi_routing" "$PKG/results/multi"
-cp results/multi_routing/*.json "$PKG/results/multi_routing/" 2>/dev/null || true
+mkdir -p "$PKG/results/multi_routing" "$PKG/results/multi" \
+         "$PKG/results/multi_routing_embed" "$PKG/results/multi_seed"
+cp results/multi_routing/*.json          "$PKG/results/multi_routing/"       2>/dev/null || true
+cp results/multi_routing_embed/*.json    "$PKG/results/multi_routing_embed/" 2>/dev/null || true
+cp results/multi_seed/*.json             "$PKG/results/multi_seed/"          2>/dev/null || true
 for d in results/multi/*/; do
     name=$(basename "$d")
     if [ -f "$d/results.json" ]; then
@@ -28,6 +31,9 @@ for d in results/multi/*/; do
         cp "$d/results.json" "$PKG/results/multi/$name/"
     fi
 done
+
+# include INTEGRITY.md
+cp docs/INTEGRITY.md "$PKG/docs/" 2>/dev/null || true
 
 # slides + figures (the submitted deck + figs)
 mkdir -p "$PKG/slides"
