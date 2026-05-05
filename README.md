@@ -54,16 +54,16 @@ python3 eval/make_figures.py
 python3 -m pytest mcp/test_mcp.py -v
 ```
 
-## Headline numbers (16-problem, single-seed run, 2026-04-27)
+## Headline numbers (26-problem eval, 2026-05-05)
 
-Routing F1 — best-of-provider (n=16, full coverage):
+Routing F1 — best-of-provider, single seed and 3-seed mean:
 
-| Provider | Model | Precision | Recall | F1 | Kind agreement |
-|---|---|---|---|---|---|
-| OpenAI | GPT-5.2 | 0.510 | 0.463 | **0.467** | 0.753 |
-| AWS Bedrock | DeepSeek V3.2 | 0.458 | 0.429 | **0.441** | 0.777 |
-| Google | Gemini 2.5 Flash-Lite | 0.500 | 0.417 | **0.437** | 0.719 |
-| Anthropic | Claude Opus 4.7 | 0.396 | 0.365 | **0.375** | 0.901 |
+| Provider | Model | F1 (1 seed, n=26) | F1 (3 seeds, n=26) | σ_prob |
+|---|---|---|---|---|
+| Google | Gemini 2.5 Flash-Lite | 0.464 | **0.514** | 0.094 |
+| Anthropic | Claude Opus 4.7 | 0.265 | **0.404** | 0.161 |
+| AWS Bedrock | DeepSeek V3.2 | 0.355 | **0.390** | 0.071 |
+| OpenAI | GPT-5.2 | 0.433 | **0.381** | 0.126 |
 
 Scratch baseline (single-shot Verilog → Icarus testbench):
 
@@ -87,8 +87,12 @@ The full leaderboard for all 15 models is in `results/multi_routing/summary.json
 | Final presentation deck + spoken script | ✓ submitted 2026-04-27 |
 | End-to-end harness on extended set | partial (older 1/9 cpu_ip, not re-run) |
 | Reuse-ratio metric on TopModule | not wired |
-| Multi-seed runs | not done |
-| IEEE 3-page final report | in progress (due 2026-05-10) |
+| Multi-seed runs (n=3 for headline 4) | ✓ done 2026-05-05 |
+| Embedding-similarity router as alt | ✓ implemented (`harness/ip_router_embed.py`) |
+| Failure-mode quantification | ✓ done (`results/multi_routing/failure_modes.json`) |
+| Cost-and-latency analysis | ✓ done (`results/multi_routing/cost_latency.json`) |
+| INTEGRITY.md (anti-LLM-slop docs) | ✓ done (`docs/INTEGRITY.md`) |
+| IEEE 3-page final report | ✓ ready (due Fri 2026-05-08) |
 
 See [CONTEXT.md](./CONTEXT.md) for the full TODO list, weak spots, and reproduction notes.
 

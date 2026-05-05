@@ -18,13 +18,15 @@ The **central claim** we land on, supported by 16-problem multi-LLM data:
 
 **Final report**: due **Fri 2026-05-08 23:59 EDT** (moved up from 5/10 by FAS Registrar's Office mandate, see Canvas announcement on 5/1). IEEE 8.5×11 two-column, 3 pages excluding refs and supplement. PDF + zip submission. Graded on (1) novelty, (2) results and significance, (3) writing quality.
 
-**State of the eval** (see `results/multi_routing/summary.json`):
-- 15 LLMs across 4 providers ran the routing pipeline on 26 ChipBench problems (expanded from 16 on 2026-05-05)
-- Headline 4 models for the report (best-of-provider, on 16-problem snapshot used in current report — re-eval on 26 in progress):
-  - Claude Opus 4.7 — F1=0.375
-  - GPT-5.2 — F1=0.467
-  - DeepSeek V3.2 — F1=0.441
-  - Gemini 2.5 Flash-Lite — F1=0.437
+**State of the eval** (see `results/multi_routing/summary.json` + `results/multi_seed/summary.json`):
+- 15 LLMs across 4 providers ran the routing pipeline on 26 ChipBench problems (390 total calls, completed 2026-05-05)
+- Headline 4 models, single-seed F1 on 26 problems:
+  - Gemini 2.5 Flash-Lite — F1=0.464 (multi-seed: 0.514 ± 0.094)
+  - GPT-5.2 — F1=0.433 (multi-seed: 0.381 ± 0.126)
+  - DeepSeek V3.2 — F1=0.355 (multi-seed: 0.390 ± 0.071)
+  - Claude Opus 4.7 — F1=0.265 (multi-seed: 0.404 ± 0.161)
+- Multi-seed (n=3) for the four headline models adds proper variance bars and reorders the leaderboard.
+- Embedding-similarity router (`harness/ip_router_embed.py`) lifts mean F1 by +0.029 across all 15 models on the 16-problem snapshot.
 - Scratch baseline (foil): mostly flat at ~1/9 = 11% on cpu_ip, with Anthropic best on not_self_contain at 50%
 
 **State of the corpus** (see `mcp/corpus/catalog.json`):
