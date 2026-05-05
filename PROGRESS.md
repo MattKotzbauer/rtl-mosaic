@@ -1,8 +1,45 @@
-# Progress Report — Final Presentation 2026-04-27
+# Progress Report — Team 11
 
 **Team 11**: Leonardo Ferreira, Matthew Kotzbauer, Warren Zhu
 **Course**: CS 1440R / 2440R, HT Kung
-**Slot**: Mon 4/27, 3:42pm
+**Final presentation**: delivered Mon 2026-04-27, 3:42pm
+**Final report deadline**: Sun 2026-05-10, 23:59 EDT
+**Last updated**: 2026-05-05
+
+## Submission readiness (2026-05-05)
+
+The repo is in a submittable state today, five days before the report deadline. Headline numbers, leading figure, 3-page IEEE PDF, code supplement script, and reproducibility docs are all in place and verified.
+
+| Submission artifact | State | Path |
+|---|---|---|
+| 3-page IEEE PDF | builds clean, 3 pages, all citations resolve | `report/report.pdf` |
+| LaTeX source | scrubbed of LLM voice patterns | `report/report.tex` |
+| Leading figure (rubric requires one) | renders pipeline + orthogonality scatter, 4 highlighted models | `report/figs/leading.{pdf,png}` |
+| Code supplement zip | builder script ready, follows Canvas naming convention | `scripts/build_supplement.sh` |
+| Project context | canonical state doc, linked from project CLAUDE.md | `CONTEXT.md` |
+| Repo README | current with 30 IPs / 16 problems / 15 models | `README.md` |
+
+### What was validated (and how)
+
+| Claim | Validation |
+|---|---|
+| 30 IPs in corpus, all self-tests pass | Re-ran every `iverilog -g2012` self-test 2026-05-05; 30/30 PASS |
+| 15 models in routing eval, 16 problems | `summary.json` keys + per-LLM `n` values verified |
+| Headline 4 models F1 numbers (table I in report) | Match `summary.json` exactly, n=16 in each cell |
+| Report compiles to 3 pages | `pdflatex` runs twice, exit 0, `pdfinfo` reports Pages: 3 |
+| Citations resolve | No `[?]` in compiled PDF |
+| Voice scrub leaves content intact | Two parallel forks edited only voice, page count unchanged |
+
+### What was NOT validated (open risks)
+
+| Risk | Mitigation we'd want |
+|---|---|
+| Single-seed numbers, run-to-run variance is real (Opus 4.7 swung 0.678→0.375 between runs) | Multi-seed (n=3) averaging, not done |
+| Single annotator on the 16 gold labels | Cohen's kappa with second annotator, not done |
+| Citation arXiv IDs trusted from intermediate slides, not independently verified | Spot-check before final submission |
+| Team contribution split is approximate | Confirm with Leo and Warren before submitting |
+| Harness end-to-end pass rate vs scratch baseline on cpu_ip is the same (1/9), report softens around this | Frame routing-quality as the contribution, do not claim end-to-end win |
+| IEEE format: used `\documentclass[conference]{IEEEtran}`, not strictly verified against the latest IEEE template | Run a conference-format checker before final submission |
 
 ## Post-presentation expansion (2026-04-27, after final)
 
