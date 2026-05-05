@@ -6,9 +6,20 @@
 **Final report deadline**: **Fri 2026-05-08, 23:59 EDT** (moved up from 5/10 by FAS Registrar mandate, see Canvas announcement 5/1)
 **Last updated**: 2026-05-05
 
-## Submission readiness (2026-05-05)
+## Submission readiness (2026-05-05, end of day)
 
-The repo is in a submittable state today, three days before the revised report deadline. Headline numbers, leading figure, 3-page IEEE PDF, code supplement script, and reproducibility docs are all in place and verified.
+The repo is in a submittable state today, three days before the revised report deadline.
+
+Updates since morning checkpoint:
+- Eval expanded from 16 to 26 problems (10 new hand-labeled ChipBench self_contain entries)
+- Re-ran routing eval on all 15 models on the 26-problem set (390 calls)
+- Multi-seed (n=3) runs for the four headline models (312 additional calls), reordered the leaderboard
+- Embedding-similarity router added as a comparison configuration
+- Cost-and-latency analysis for all 15 models (191x cost spread; Pareto frontier is entirely Gemini Flash variants)
+- Failure-mode quantification (4 modes per LLM) with stacked-bar figure
+- `docs/INTEGRITY.md` documents how the benchmark resists LLM-generated problems/labels
+- Report Table I now reports both single-seed and 3-seed mean with per-problem σ
+- Supplement zip rebuilt to include all new JSON results, INTEGRITY.md, multi_seed/ output Headline numbers, leading figure, 3-page IEEE PDF, code supplement script, and reproducibility docs are all in place and verified.
 
 | Submission artifact | State | Path |
 |---|---|---|
