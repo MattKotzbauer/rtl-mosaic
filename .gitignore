@@ -25,3 +25,4 @@ report/*.synctex.gz
 Team_*.zip
 .pytest_cache/
 .deepeval/
+harness/_ip_embeddings.json

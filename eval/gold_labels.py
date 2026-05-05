@@ -199,6 +199,103 @@ GOLD: dict[str, GoldEntry] = {
         },
         "rationale": "4x4 pipelined multiplier -- the combinational core is a multiplier IP; the pipeline registers between stages are trivial bespoke logic.",
     },
+
+    # -----------------------------------------------------------------------
+    # ChipBench self_contain set (second batch, 2026-05-05)
+    # -----------------------------------------------------------------------
+    "Prob006_data_serial-to-parallel_circuit": {
+        "expected_subblocks": ["shift_register"],
+        "expected_kinds": {
+            "serial_shift_in": "REUSE_IP",
+            "handshake_fsm":   "GENERATE",
+        },
+        "rationale": "1-bit to 6-bit serial-to-parallel converter -- shift_register IP handles the data accumulation, handshake protocol logic is custom.",
+    },
+
+    "Prob011_4-bit_carry_look-ahead_adder_circuit": {
+        "expected_subblocks": [],
+        "expected_kinds": {
+            "cla_gate_logic": "GENERATE",
+        },
+        "rationale": "Spec requires gate-level primitives (AND, OR, XOR) rather than behavioral RTL, which forces a bespoke gate-network implementation; the corpus cla_adder uses behavioral assigns.",
+    },
+
+    "Prob013_least_common_multiple": {
+        "expected_subblocks": ["divider", "multiplier"],
+        "expected_kinds": {
+            "gcd_step":      "REUSE_IP",
+            "lcm_compute":   "REUSE_IP",
+            "valid_fsm":     "GENERATE",
+        },
+        "rationale": "Euclidean GCD uses a%b each iteration (divider IP), LCM = A*B/GCD uses multiplier IP; the iterative-FSM and valid handshake are bespoke.",
+    },
+
+    "Prob015_vending_machine2": {
+        "expected_subblocks": [],
+        "expected_kinds": {
+            "vending_fsm":     "GENERATE",
+            "change_dispense": "GENERATE",
+        },
+        "rationale": "Currency-state vending FSM with selection and change logic -- no corpus IP fits the state-machine structure, fully bespoke.",
+    },
+
+    "Prob024_multiplication_and_bitwise_operations": {
+        "expected_subblocks": [],
+        "expected_kinds": {
+            "shift_add_network": "GENERATE",
+        },
+        "rationale": "A * 0xFB with minimum-resource hint pushes toward shift/subtract optimization (A<<8 - A<<2 - A) rather than a full multiplier; the optimization is bespoke.",
+    },
+
+    "Prob025_pulse_synchronization_circuit": {
+        "expected_subblocks": ["edge_detector"],
+        "expected_kinds": {
+            "edge_detect":     "REUSE_IP",
+            "sync_chain":      "GENERATE",
+            "toggle_decode":   "GENERATE",
+        },
+        "rationale": "Cross-clock-domain pulse sync -- edge_detector handles the input pulse capture, the toggle-flag plus 2-FF synchronizer chain is bespoke CDC logic.",
+    },
+
+    "Prob026_simple_stopwatch": {
+        "expected_subblocks": ["up_counter"],
+        "expected_kinds": {
+            "second_counter": "REUSE_IP",
+            "minute_counter": "REUSE_IP",
+            "rollover_logic": "GENERATE",
+        },
+        "rationale": "Two cascaded mod-60 counters for seconds and minutes -- up_counter IP can be parameterized for both, the at-60 reset and pause-at-60-min behaviors are bespoke.",
+    },
+
+    "Prob027_settable_counter": {
+        "expected_subblocks": ["up_counter", "mux2"],
+        "expected_kinds": {
+            "counter_core": "REUSE_IP",
+            "load_mux":     "REUSE_IP",
+            "zero_flag":    "GENERATE",
+        },
+        "rationale": "4-bit hex counter with synchronous set input -- up_counter for the increment path, mux2 selects between counter+1 and set_num, zero-flag is a one-line equality check.",
+    },
+
+    "Prob033_traffic_lights": {
+        "expected_subblocks": ["down_counter"],
+        "expected_kinds": {
+            "phase_timer":    "REUSE_IP",
+            "phase_fsm":      "GENERATE",
+            "pedestrian_cut": "GENERATE",
+        },
+        "rationale": "Red/green/yellow FSM with per-phase countdowns -- down_counter handles the per-phase timer; the FSM transitions and pedestrian-request shortening are bespoke.",
+    },
+
+    "Prob034_gaming_machine_billing_program": {
+        "expected_subblocks": ["subtractor"],
+        "expected_kinds": {
+            "balance_decrement": "REUSE_IP",
+            "mode_fsm":          "GENERATE",
+            "warning_flags":     "GENERATE",
+        },
+        "rationale": "Prepaid billing system -- subtractor handles per-cycle balance decrement (1 or 2 yuan), the mode FSM and red/yellow warning thresholds are bespoke.",
+    },
 }
 
 
