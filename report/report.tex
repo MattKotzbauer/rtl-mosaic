@@ -88,7 +88,7 @@ We ran 15 LLMs across four providers. From Anthropic via the \texttt{claude} CLI
 
 The protocol is identical across all 15 models. Same planner system prompt, no few-shot examples, temperature zero where supported, the same router, the same 30-IP corpus, and the same 26 problems (9 ChipBench cpu\_ip + 17 ChipBench self\_contain). We use 16-way thread-pool concurrency with retries handled by the underlying SDKs.
 
-For the headline numbers in Fig.~\ref{fig:leading}(b) and Table~\ref{tab:headline} we report the four best-of-provider models with full $n=26$ coverage: Claude Opus 4.7, GPT-5.2, DeepSeek V3.2, and Gemini 2.5 Flash-Lite. We expanded the eval set from 16 to 26 problems on 2026-05-05 to broaden statistical coverage; numbers in this report are from the expanded set.
+For the headline numbers in Fig.~\ref{fig:leading}(b) and Table~\ref{tab:headline} we report the four best-of-provider models with full $n=26$ coverage: Claude Opus 4.7, GPT-5.2, DeepSeek V3.2, and Gemini 2.5 Flash-Lite. We expanded the eval set from 16 to 26 problems on 2026-05-05 to broaden statistical coverage, and numbers in this report are from the expanded set.
 
 \subsection{Eval scaffolding}
 
@@ -107,7 +107,7 @@ A single full sweep across all 15 models ran in under six minutes wall-clock at 
 Our central finding is in Fig.~\ref{fig:leading}(b). The four colored dots are the best-of-provider headline models. The grey dots are the other 11 LLMs. The x-axis is scratch pass rate on the cpu\_ip set --- single-shot Verilog through the ChipBench testbench. The y-axis is routing F1 against our hand-labeled gold on the 26-problem eval set. The scatter shows no diagonal correlation between routing F1 and scratch pass rate, which means routing skill does not simply follow overall model strength.
 
 \begin{table}[t]
-  \caption{Headline routing F1, best-of-provider, 26-problem eval (9 cpu\_ip + 17 self\_contain). Single-seed columns from the full 15-model sweep, multi-seed columns (n=3 seeds) from a focused re-run on the four headline models. Per-problem standard deviation $\sigma$ is reported as evidence of run-to-run variance at temperature zero.}
+  \caption{Headline routing F1, best-of-provider, 26-problem eval (9 cpu\_ip + 17 self\_contain). Single-seed column from the full 15-model sweep (23--26 successful calls per model depending on API availability), multi-seed column (n=3 seeds) from a focused re-run on the four headline models. Per-problem $\sigma$ quantifies run-to-run variance at temperature zero.}
   \label{tab:headline}
   \centering
   \footnotesize
