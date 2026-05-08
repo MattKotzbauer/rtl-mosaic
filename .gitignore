@@ -22,7 +22,7 @@ report/*.out
 report/*.bbl
 report/*.blg
 report/*.synctex.gz
-Team_*.zip
+# Team_*.zip — tracked intentionally for submission
 .pytest_cache/
 .deepeval/
 harness/_ip_embeddings.json

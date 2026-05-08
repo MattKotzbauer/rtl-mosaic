@@ -27,7 +27,7 @@ The headline finding from the multi-LLM benchmark is that **IP-reuse skill behav
 | `harness/`  | Planner + IP router + codegen + integrator (end-to-end CLI) |
 | `mcp/`      | IP-search MCP server + 30-IP corpus + per-IP self-tests |
 | `slides/`   | Final-presentation Beamer source + PDF + figures + spoken script |
-| `report/`   | IEEE 2-col final report (in progress, due 2026-05-10) |
+| `report/`   | IEEE 2-col final report + leading figure |
 | `results/`  | Generated outputs (`multi_routing/`, `multi/`, `harness/`), with large files gitignored |
 | `docs/`     | Architecture diagram, IP corpus plan |
 
@@ -38,7 +38,7 @@ The headline finding from the multi-LLM benchmark is that **IP-reuse skill behav
 source ~/school/.env  # OPENAI_API_KEY, GEMINI_API_KEY, AWS creds for Bedrock
 # requires `claude` CLI on PATH for Anthropic models, `iverilog -g2012` for sim
 
-# multi-LLM routing eval (15 models x 16 problems = 240 calls)
+# multi-LLM routing eval (15 models x 26 problems)
 python3 eval/multi_routing.py --workers 16
 
 # multi-LLM scratch baseline (foil)
@@ -74,27 +74,7 @@ Scratch baseline (single-shot Verilog → Icarus testbench):
 
 The full leaderboard for all 15 models is in `results/multi_routing/summary.json` and rendered in `slides/figs/routing_f1.pdf`. Per-provider data including planner blocks and router decisions is in `results/multi_routing/<provider>.json`.
 
-## Status (2026-05-04)
-
-| Component | Status |
-|---|---|
-| 30-IP corpus with self-tests | ✓ all pass |
-| Multi-provider runner (Claude / OpenAI / Bedrock / Gemini) | ✓ |
-| 16-problem hand-labeled gold | ✓ |
-| 15-model × 16-problem routing eval | ✓ |
-| Scratch baseline (15 models) | ✓ |
-| Figure pipeline (10 figures) | ✓ |
-| Final presentation deck + spoken script | ✓ submitted 2026-04-27 |
-| End-to-end harness on extended set | partial (older 1/9 cpu_ip, not re-run) |
-| Reuse-ratio metric on TopModule | not wired |
-| Multi-seed runs (n=3 for headline 4) | ✓ done 2026-05-05 |
-| Embedding-similarity router as alt | ✓ implemented (`harness/ip_router_embed.py`) |
-| Failure-mode quantification | ✓ done (`results/multi_routing/failure_modes.json`) |
-| Cost-and-latency analysis | ✓ done (`results/multi_routing/cost_latency.json`) |
-| INTEGRITY.md (anti-LLM-slop docs) | ✓ done (`docs/INTEGRITY.md`) |
-| IEEE 3-page final report | ✓ ready (due Fri 2026-05-08) |
-
-See [CONTEXT.md](./CONTEXT.md) for the full TODO list, weak spots, and reproduction notes.
+See [CONTEXT.md](./CONTEXT.md) for current project status, open TODOs, and reproduction notes.
 
 ## License
 

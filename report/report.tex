@@ -34,7 +34,7 @@
 \maketitle
 
 \begin{abstract}
-Existing LLM-for-Verilog benchmarks score models on scratch generation: given a spec, write the code. Real chip design is compositional, with modern SoCs running 60--70\% licensed IP by area. We built rtl-mosaic, a system-level harness that decomposes a Verilog spec into subblocks, routes reusable pieces to a curated 30-IP corpus over MCP, and stitches the result through Icarus Verilog testbenches. We then ran 15 frontier LLMs from four providers through the harness on 26 ChipBench problems (9 cpu\_ip + 17 self\_contain), scoring each against 26 hand-labeled gold entries. Across these runs, IP-reuse skill emerges as a distinct axis from scratch coding: routing F1 spreads from 0.19 to 0.46 across models while scratch pass rate on the same problems stays roughly flat. A reuse-aware metric reveals a model capability that scratch-only benchmarks hide.
+Existing LLM-for-Verilog benchmarks score models on from-scratch generation of RTL code. Real-world chip design tasks, however, tend to be more compositional, with modern SoCs running 60--70\% licensed IP by area. We built rtl-mosaic, a system-level harness that decomposes a Verilog spec into subblocks, routes reusable pieces to a curated 30-IP corpus over MCP, and stitches the result through Icarus Verilog testbenches. We then ran 15 frontier LLMs from four providers through the harness on 26 ChipBench problems (9 cpu\_ip + 17 self\_contain), scoring each against 26 hand-labeled gold entries. Across these runs, IP-reuse skill emerges as a distinct axis from scratch coding: routing F1 spreads from 0.19 to 0.46 across models while scratch pass rate on the same problems stays roughly flat. A reuse-aware metric reveals a model capability that scratch-only benchmarks are unable to capture.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -45,18 +45,18 @@ LLM, Verilog, RTL, IP reuse, benchmark, MCP, hardware design
 \section{Introduction}
 % ====================================================================
 
-A modern SoC is 60--70\% licensed IP by area~\cite{semico-ip-share}. Companies like Synopsys and Cadence ship thousands of pre-verified IP blocks, and re-authoring every primitive from scratch is incompatible with tape-out economics. Yet the dominant benchmarks for LLM-driven Verilog --- VerilogEval~\cite{verilogeval} and ChipBench~\cite{chipbench} --- score models on \emph{scratch generation}: given a spec, write the code. Neither rewards the agent for recognizing that an off-the-shelf register file would do, nor penalizes re-authoring one.
+A modern SoC is 60--70\% licensed IP by area~\cite{semico-ip-share}. Companies like Synopsys and Cadence ship thousands of pre-verified IP blocks, and re-authoring every primitive from scratch is incompatible with tape-out economics. Yet existing dominant benchmarks for LLM-driven Verilog (VerilogEval~\cite{verilogeval}, ChipBench~\cite{chipbench}) score models exclusively on \emph{scratch generation}, measuring whether a model can produce functionally correct Verilog from a natural-language specification. Neither rewards the agent for recognizing that an off-the-shelf register file would suffice, nor penalizes re-authoring one from gates.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{figs/leading.pdf}
-  \caption{(a) The rtl-mosaic evaluation pipeline. A spec goes to an LLM-as-planner that emits subblocks tagged \texttt{REUSE\_IP} or \texttt{GENERATE}. Reusable subblocks resolve through a deterministic router over a 30-IP corpus served via MCP. Custom logic goes through codegen. The integrator stitches everything into a \texttt{TopModule} verified by Icarus Verilog. (b) The headline finding. Each dot is one of 15 frontier LLMs we evaluated. The four colored dots are best-of-provider models. Routing F1 (y-axis, vs. hand-labeled gold) and scratch Verilog pass rate on the same RISC-V CPU IP problems (x-axis) show no diagonal trend, so a model's scratch coding score gives little information about its IP-routing score.}
+  \caption{(a) The rtl-mosaic evaluation pipeline. A spec goes to an LLM-as-planner that emits subblocks tagged \texttt{REUSE\_IP} or \texttt{GENERATE}. Reusable subblocks resolve through a deterministic router over a 30-IP corpus served via MCP. Custom logic goes through codegen. The integrator stitches everything into a \texttt{TopModule} verified by Icarus Verilog. (b) Each dot is one of 15 frontier LLMs we evaluated. The four colored dots are best-of-provider models. Routing F1 (y-axis, vs. hand-labeled gold) and scratch Verilog pass rate on the same RISC-V CPU IP problems (x-axis) show no diagonal trend, so a model's scratch coding score gives little information about its IP-routing score.}
   \label{fig:leading}
 \end{figure}
 
-We argue this is the wrong incentive: the capability worth measuring is whether a model recognizes the FIFO is on the shelf and uses it correctly with the right widths and ports. To make this concrete we built rtl-mosaic --- a system-level harness on top of SiliconMind-V1~\cite{siliconmind} --- and used it as the substrate for a multi-LLM benchmark.
+We argue this is the wrong incentive: the capability worth measuring is whether a model recognizes the FIFO is on the shelf and uses it correctly with the right widths and ports. This motivates rtl-mosaic, a system-level harness on top of SiliconMind-V1~\cite{siliconmind}, and used it as the substrate for a multi-LLM benchmark.
 
-\textbf{Contributions.} We introduce a reuse-aware evaluation protocol for Verilog generation. We ship a 30-IP corpus served over MCP, 26 hand-labeled gold-standard decomposition problems on top of ChipBench, and both a deterministic keyword-overlap router and an embedding-similarity router for comparison. We run 15 frontier LLMs spanning Anthropic, OpenAI, AWS Bedrock (DeepSeek), and Google through the protocol --- 390 evaluation calls. The result, summarized in Fig.~\ref{fig:leading}, separates routing skill from scratch skill: F1 spread of 0.27 across models against a much narrower scratch-pass-rate spread on the same problems. We open-source the corpus, gold labels, and runner at \url{https://github.com/MattKotzbauer/rtl-mosaic}.
+\textbf{Contributions.} We introduce a reuse-aware evaluation protocol for Verilog generation. We ship a 30-IP corpus served over MCP, 26 hand-labeled gold-standard decomposition problems on top of ChipBench, and both a deterministic keyword-overlap router and an embedding-similarity router for comparison. We run 15 frontier LLMs spanning Anthropic, OpenAI, AWS Bedrock (DeepSeek), and Google through the protocol (390 evaluation calls total). The result, summarized in Fig.~\ref{fig:leading}, separates routing skill from scratch skill: F1 spread of 0.27 across models against a much narrower scratch-pass-rate spread on the same problems. We open-source the corpus, gold labels, and runner at \url{https://github.com/MattKotzbauer/rtl-mosaic}.
 
 % ====================================================================
 \section{Approach}
@@ -84,19 +84,19 @@ The gold labels live in \texttt{eval/gold\_labels.py} as a Python dict, written 
 
 \subsection{Models tested}
 
-We ran 15 LLMs across four providers. From Anthropic via the \texttt{claude} CLI: Opus 4.7, Sonnet 4.6, Haiku 4.5. From OpenAI via the chat-completions API: GPT-5.4, 5.2, 5.1, 5, and 4.1. From AWS Bedrock in \texttt{us-east-1} via the converse API: DeepSeek-R1 (through the \texttt{us.deepseek.r1-v1:0} inference profile) and DeepSeek V3.2. From Google Gemini via the \texttt{generativelanguage.googleapis.com/v1beta} REST endpoint: 2.5 Pro, 2.5 Flash, 2.5 Flash-Lite, 3 Flash Preview, and 3.1 Flash-Lite Preview. Three additional Gemini variants (3 Pro Preview, 3.1 Pro Preview) returned 503s on the majority of calls during our run window and were excluded.
+We ran 15 LLMs across four providers. From Anthropic via the \texttt{claude} CLI: Opus 4.7, Sonnet 4.6, Haiku 4.5. From OpenAI via the chat-completions API: GPT-5.4, 5.2, 5.1, 5, and 4.1. From AWS Bedrock in \texttt{us-east-1} via the converse API: DeepSeek-R1 (through the \texttt{us.deepseek.r1-v1:0} inference profile) and DeepSeek V3.2. From Google Gemini via the \texttt{generativelanguage.googleapis.com/v1beta} REST endpoint: 2.5 Pro, 2.5 Flash, 2.5 Flash-Lite, 3 Flash Preview, and 3.1 Flash-Lite Preview. (Three additional Gemini variants (3 Pro Preview, 3.1 Pro Preview) returned 503s on the majority of calls during our testing and were excluded.)
 
-The protocol is identical across all 15 models. Same planner system prompt, no few-shot examples, temperature zero where supported, the same router, the same 30-IP corpus, and the same 26 problems (9 ChipBench cpu\_ip + 17 ChipBench self\_contain). We use 16-way thread-pool concurrency with retries handled by the underlying SDKs.
+All 15 models receive the same planner system prompt with no few-shot examples, temperature set to zero where the API supports it, and are evaluated against the same 30-IP corpus on the same 26 problems (9 from ChipBench cpu\_ip and 17 from self\_contain). We use 16-way thread-pool concurrency with retries handled by the underlying SDKs.
 
 For the headline numbers in Fig.~\ref{fig:leading}(b) and Table~\ref{tab:headline} we report the four best-of-provider models with full $n=26$ coverage: Claude Opus 4.7, GPT-5.2, DeepSeek V3.2, and Gemini 2.5 Flash-Lite. We expanded the eval set from 16 to 26 problems on 2026-05-05 to broaden statistical coverage, and numbers in this report are from the expanded set.
 
 \subsection{Eval scaffolding}
 
-The full multi-LLM routing eval is one Python file (\texttt{eval/multi\_routing.py}, $\sim$160 lines). It loads the gold labels, fans out 240 calls across providers, records planner output and router decisions per call, and aggregates into per-(LLM, problem) records and a per-LLM summary. Per-call latency, raw planner output, parsed subblocks, and router decisions are all preserved in JSON for post-hoc analysis. The figure pipeline (\texttt{eval/make\_figures.py}) regenerates ten plots from the JSON without re-running the eval.
+The full multi-LLM routing eval is contained in (\texttt{eval/multi\_routing.py}, $\sim$160 lines). It loads the gold labels, fans out 240 calls across providers, records planner output and router decisions per call, and aggregates into per-(LLM, problem) records and a per-LLM summary. Per-call latency, raw planner output, parsed subblocks, and router decisions are all preserved in JSON for post-hoc analysis. The figure pipeline (\texttt{eval/make\_figures.py}) regenerates ten plots from the JSON without re-running the eval.
 
 \subsection{Cost and time}
 
-A single full sweep across all 15 models ran in under six minutes wall-clock at 16-way concurrency. The most expensive provider per call was OpenAI ($\sim$\$0.03 for GPT-5.4 on a typical planner call, dominated by output tokens). DeepSeek-R1 on Bedrock was the cheapest at roughly \$0.30 for the entire 9-problem run including reasoning-trace tokens. The full reproducible eval, including all the nice-to-have per-provider sweeps we did during development, came in under \$25 total.
+A single full sweep across all 15 models runs in under six minutes using 16-way concurrency. The most expensive provider per call was OpenAI ($\sim$\$0.03 for GPT-5.4 on a typical planner call, dominated by output tokens). DeepSeek-R1 on Bedrock was the cheapest at roughly \$0.30 for the entire 9-problem run including reasoning-trace tokens. The full reproducible eval, including all per-provider sweeps during development, costed under \$25 total.
 
 % ====================================================================
 \section{Results}
@@ -104,7 +104,7 @@ A single full sweep across all 15 models ran in under six minutes wall-clock at 
 
 \subsection{Routing quality is its own axis}
 
-Our central finding is in Fig.~\ref{fig:leading}(b). The four colored dots are the best-of-provider headline models. The grey dots are the other 11 LLMs. The x-axis is scratch pass rate on the cpu\_ip set --- single-shot Verilog through the ChipBench testbench. The y-axis is routing F1 against our hand-labeled gold on the 26-problem eval set. The scatter shows no diagonal correlation between routing F1 and scratch pass rate, which means routing skill does not simply follow overall model strength.
+Fig.~\ref{fig:leading}(b) plots each of the 15 LLMs as a dot, with the four colored dots representing best-of-provider headline models. The x-axis is scratch pass rate on the cpu\_ip set (single-shot Verilog through the ChipBench testbench) and the y-axis is routing F1 against our hand-labeled gold on the 26-problem eval set. The scatter shows no diagonal correlation between the two axes, meaning routing skill does not simply follow overall model strength.
 
 \begin{table}[t]
   \caption{Headline routing F1, best-of-provider, 26-problem eval (9 cpu\_ip + 17 self\_contain). Single-seed column from the full 15-model sweep (23--26 successful calls per model depending on API availability), multi-seed column (n=3 seeds) from a focused re-run on the four headline models. Per-problem $\sigma$ quantifies run-to-run variance at temperature zero.}
@@ -135,7 +135,7 @@ We observed four recurring failure modes across the 390 calls. (1) \emph{Halluci
 
 \subsection{The corpus-disambiguation bottleneck and the embedding router}
 
-When we expanded the corpus from 20 to 30 IPs, mean F1 across the keyword-router eval dropped, not because corpus coverage worsened but because of corpus disambiguation. Adding \texttt{up\_down\_counter}, \texttt{johnson\_counter}, and \texttt{gray\_counter} alongside the existing \texttt{up\_counter} created near-duplicate keyword profiles, so a planner emitting \texttt{search\_query="counter"} resolves to whichever IP keyword matches first rather than the architecturally correct one. Replacing the keyword router with cosine similarity over OpenAI \texttt{text-embedding-3-small} representations of each IP's name, description, and keywords lifts mean F1 by $+0.029$ across all 15 models, with $9$ of $15$ improving by $\geq 0.01$ (DeepSeek-R1 $+0.128$, GPT-5.2 $+0.100$, GPT-5.4 $+0.079$). This says the routing bottleneck lives in the router, not in the planner LLM, for a meaningful share of the spread we measure.
+When we expanded the corpus from 20 to 30 IPs, mean F1 across the keyword-router eval dropped, not because corpus coverage worsened but because of corpus disambiguation. Adding \texttt{up\_down\_counter}, \texttt{johnson\_counter}, and \texttt{gray\_counter} alongside the existing \texttt{up\_counter} created near-duplicate keyword profiles, so a planner emitting \texttt{search\_query="counter"} resolves to whichever IP keyword matches first rather than the architecturally correct one. Replacing the keyword router with cosine similarity over OpenAI \texttt{text-embedding-3-small} representations of each IP's name, description, and keywords lifts mean F1 by $+0.029$ across all 15 models, with $9$ of $15$ improving by $\geq 0.01$ (DeepSeek-R1 $+0.128$, GPT-5.2 $+0.100$, GPT-5.4 $+0.079$). This means some degree of the routing bottleneck lives in the router, not just in the planner LLM, within the measured spread.
 
 % ====================================================================
 \section{Related Work}
@@ -157,7 +157,7 @@ A reuse-aware metric separates LLMs that scratch-only benchmarks group together.
 \section*{Team Contributions}
 % ====================================================================
 
-\textbf{Matt Kotzbauer}: 30-IP corpus and self-tests, multi-provider runner, gold labels, figure pipeline, and the report. \textbf{Warren Zhu}: planner, integrator, MCP IP-router, end-to-end harness CLI. \textbf{Leonardo Ferreira}: ChipBench baseline runner, eval metrics, and slide deck logistics.
+\textbf{Matt Kotzbauer}: 30-IP corpus and self-tests, multi-provider runner, gold labels, eval metrics, figure pipeline, and the report. \textbf{Warren Zhu}: planner, integrator, ChipBench baseline runner, MCP IP-router, end-to-end harness CLI. 
 
 % ====================================================================
 \bibliographystyle{IEEEtran}
